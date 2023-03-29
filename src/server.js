@@ -5,8 +5,9 @@ import dotenv from 'dotenv'
 import './routes/users.js'
 
 dotenv.config()
+const port = process.env.PORT || 3000
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(port, () => {
     const date = new Date()
-    console.log(`Server started at ${date}.`)
+    console.log(`Server started at ${date} at port ${port}.`)
 })
