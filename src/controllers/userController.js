@@ -20,6 +20,28 @@ export default class UserController {
         }
     }
 
+    // upload profile image
+    async uploadProfileImage(request, response) {
+        const { id } = request.params
+        const image = request.files.image
+        const imageData = image.data
+
+        try {
+            const uploaded = await this.#service.uploadProfileImage(id, imageData)
+
+            if (uploaded) {
+                response.status(200).json({ uploaded })
+            }
+            else {
+                response.status(404).json({ message: 'User not found' })
+            }
+        }
+        catch (error) {
+            console.error(error)
+            response.status(500).json({ message: 'Internal Server Error' })
+        }
+    }
+
     // initialize
     static async initialize(dependencies) {
         const controller = new UserController(dependencies)

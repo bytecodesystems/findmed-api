@@ -18,4 +18,18 @@ export default class Database {
             throw error
         }
     }
+
+    // upload profile image
+    async profileImage(id, imageData) {
+        try {
+            const [rows] = await this.#pool
+                .promise()
+                .execute('UPDATE users SET img_profile=? WHERE id=?', [imageData, id])
+
+            return rows
+        }
+        catch (error) {
+            throw error
+        }
+    }
 }
