@@ -1,7 +1,11 @@
 import app, { userController } from '../index.js'
+import { upload } from '../index.js'
 
 // login
-app.post('/user', userController.getUser.bind(userController))
+app.post('/user', userController.loginUser.bind(userController))
+
+// get user data
+app.get('/user/:username', userController.getUser.bind(userController))
 
 // upload profile image
-app.post('/user/:id', userController.uploadProfileImage.bind(userController))
+app.put('/user/:id', upload.single('image'), userController.uploadProfileImage.bind(userController))

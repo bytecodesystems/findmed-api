@@ -6,9 +6,9 @@ export default class UserService {
     }
 
     // login
-    async getUser(username, password) {
+    async loginUser(username, password) {
         try {
-            const rows = await this.#database.getUser(username)
+            const rows = await this.#database.loginUser(username)
 
             if (rows.length > 0) {
                 return password === rows[0].password ? true : false
@@ -22,17 +22,24 @@ export default class UserService {
         }
     }
 
+    // get user data
+    async getUser(username) {
+        try {
+            const user = await this.#database.getUser(username)
+            
+            return user
+        }
+        catch (error) {
+            throw error
+        }
+    }
+
     // upload profile image
     async uploadProfileImage(id, imageData) {
         try {
-            const rows = await this.#database.uploadProfileImage(id, imageData)
+            const updated = await this.#database.profileImage(id, imageData === undefined ? null : imageData)
 
-            if (rows.length > 0) {
-                return password === rows[0].password ? true : false
-            }
-            else {
-                return false
-            }
+            return updated
         }
         catch (error) {
             throw error

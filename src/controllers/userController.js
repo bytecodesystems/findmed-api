@@ -6,11 +6,11 @@ export default class UserController {
     }
 
     // login
-    async getUser(request, response) {
+    async loginUser(request, response) {
         const { username, password } = request.body
 
         try {
-            const validated = await this.#service.getUser(username, password)
+            const validated = await this.#service.loginUser(username, password)
 
             response.status(200).json({ validated })
         }
@@ -20,21 +20,35 @@ export default class UserController {
         }
     }
 
+    // get user data
+    async getUser(request, response) {
+        const { username } = request.params
+
+        try {
+            const user = await this.#service.getUser(username)
+
+            // response.cookie('userData', JSON.stringify(user), { 
+            //     expires: new Date(Date.now() + 3600000),
+            //     path: '/'
+            // })
+
+            response.status(200).json({ user })
+        }
+        catch (error) {
+            console.error(error)
+            response.status(500).json({ message: 'Internal Server Error '})
+        }
+    }
+
     // upload profile image
     async uploadProfileImage(request, response) {
         const { id } = request.params
-        const image = request.files.image
-        const imageData = image.data
+        const { imageData } = request.body
 
         try {
-            const uploaded = await this.#service.uploadProfileImage(id, imageData)
+            const updated = await this.#service.uploadProfileImage(id, imageData)
 
-            if (uploaded) {
-                response.status(200).json({ uploaded })
-            }
-            else {
-                response.status(404).json({ message: 'User not found' })
-            }
+            response.status(200).json({ updated })
         }
         catch (error) {
             console.error(error)
